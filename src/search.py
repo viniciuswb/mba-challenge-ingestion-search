@@ -44,40 +44,46 @@ def search_and_answer(question: str) -> str:
     # Create context from retrieved documents
     context = ""
     for doc, score in results:
-        context += f"DOCUMENTO (Score: {score:.2f}):\n{doc.page_content}\n\n"
+        context += f"DOCUMENT (Score: {score:.2f}):\n{doc.page_content}\n\n"
     
     # Create prompt template
     PROMPT_TEMPLATE = """
-    CONTEXTO:
-    {contexto}
+    CONTEXT:
+    {context}
 
-    REGRAS:
-    - Responda somente com base no CONTEXTO.
-    - Se a informação não estiver explicitamente no CONTEXTO, responda:
-      "Não tenho informações necessárias para responder sua pergunta."
-    - Nunca invente ou use conhecimento externo.
-    - Nunca produza opiniões ou interpretações além do que está escrito.
+    RULES:
+    - Answer only based on the CONTEXT.
+    - If the information is not explicitly in the CONTEXT, respond:
+      "I don't have the necessary information to answer your question."
+    - Never invent or use external knowledge.
+    - Never produce opinions or interpretations beyond what is written.
+    - Always answer in the same language as the question. 
+      If the question is in Portuguese, answer in Portuguese. If the question is in English, answer in English.
 
-    EXEMPLOS DE PERGUNTAS FORA DO CONTEXTO:
-    Pergunta: "Qual é a capital da França?"
-    Resposta: "Não tenho informações necessárias para responder sua pergunta."
+    Examples of words to be translated:
+    - "faturamento" -> "revenue"
+    - "ano de fundação" -> "foundation year"
 
-    Pergunta: "Quantos clientes temos em 2024?"
-    Resposta: "Não tenho informações necessárias para responder sua pergunta."
+    EXAMPLES OF QUESTIONS OUTSIDE THE CONTEXT:
+    Question: "What is the capital of France?"
+    Answer: "I don't have the necessary information to answer your question."
 
-    Pergunta: "Você acha isso bom ou ruim?"
-    Resposta: "Não tenho informações necessárias para responder sua pergunta."
+    Question: "How many clients do we have in 2024?"
+    Answer: "I don't have the necessary information to answer your question."
 
-    PERGUNTA DO USUÁRIO:
-    {pergunta}
+    Question: "Do you think this is good or bad?"
+    Answer: "I don't have the necessary information to answer your question."
 
-    RESPONDA A "PERGUNTA DO USUÁRIO"
+    USER QUESTION:
+    {question}
+
+    ANSWER THE "USER QUESTION"
     """
     
     prompt = PromptTemplate.from_template(PROMPT_TEMPLATE)
     
     # Format the prompt with context and question
-    formatted_prompt = prompt.format(contexto=context, pergunta=question)
+    formatted_prompt = prompt.format(context=context, question=question)
     
     # Call the LLM and get the response
     response = llm.invoke(formatted_prompt)
@@ -88,11 +94,11 @@ def search_and_answer(question: str) -> str:
 
 # Main execution for testing
 if __name__ == "__main__":
-    query = "Qual o faturamento da empresa alfa energia holding?"
+    query = "What is the revenue of Alfa Energia Holding company?"
     
     try:
         answer = search_and_answer(query)
-        print(f"Pergunta: {query}")
-        print(f"Resposta: {answer}")
+        print(f"Question: {query}")
+        print(f"Answer: {answer}")
     except Exception as e:
-        print(f"Erro ao buscar resposta: {e}")
+        print(f"Error searching for answer: {e}")

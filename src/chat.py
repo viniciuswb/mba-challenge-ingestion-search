@@ -5,41 +5,41 @@ def main():
     """
     Main CLI function that continuously prompts for questions and provides answers.
     """
-    print("=== Chat de Perguntas e Respostas ===")
-    print("Digite 'sair' ou 'quit' para encerrar o chat.\n")
+    print("=== Question and Answer Chat ===")
+    print("Type 'exit' or 'quit' to end the chat.\n")
     
     while True:
         try:
             # Prompt for user question
-            print("Faça sua pergunta:")
+            print("Ask your question:")
             question = input().strip()
             
             # Check for exit commands
-            if question.lower() in ['sair', 'quit', 'exit', 'q']:
-                print("\nEncerrando o chat. Até logo!")
+            if question.lower() in ['exit', 'quit', 'sair', 'q']:
+                print("\nEnding the chat. Goodbye!")
                 break
             
             # Skip empty questions
             if not question:
-                print("Por favor, digite uma pergunta válida.\n")
+                print("Please enter a valid question.\n")
                 continue
             
-            print(f"\nPERGUNTA: {question}")
+            print(f"\nQUESTION: {question}")
             
             # Get answer from search function
-            print("Buscando resposta...")
+            print("Searching for answer...")
             answer = search_and_answer(question)
             
-            print(f"RESPOSTA: {answer}")
+            print(f"ANSWER: {answer}")
             print("-" * 50)
             print()
             
         except KeyboardInterrupt:
-            print("\n\nChat interrompido pelo usuário. Até logo!")
+            print("\n\nChat interrupted by user. Goodbye!")
             sys.exit(0)
         except Exception as e:
-            print(f"\nErro ao processar a pergunta: {e}")
-            print("Tente novamente com uma pergunta diferente.\n")
+            print(f"\nError processing the question: {e}")
+            print("Try again with a different question.\n")
 
 if __name__ == "__main__":
     main()

@@ -1,35 +1,35 @@
-# Desafio MBA Engenharia de Software com IA - Full Cycle
+# MBA Software Engineering with AI Challenge - Full Cycle
 
-Sistema de busca e resposta baseado em RAG (Retrieval-Augmented Generation) que permite fazer perguntas sobre documentos PDF e obter respostas contextualizadas usando IA.
+RAG (Retrieval-Augmented Generation) based search and answer system that allows asking questions about PDF documents and getting contextualized responses using AI.
 
-## 📋 Pré-requisitos
+## 📋 Prerequisites
 
 - Python 3.8+
-- Docker e Docker Compose
-- Chave da API OpenAI
+- Docker and Docker Compose
+- OpenAI API Key
 
-## 🚀 Como executar o projeto
+## 🚀 How to run the project
 
-### 1. Clone o repositório e navegue até o diretório
+### 1. Clone the repository and navigate to the directory
 
 ```bash
 git clone https://github.com/viniciuswb/mba-challenge-ingestion-search.git
 cd mba-challenge-ingestion-search
 ```
 
-### 2. Configure as variáveis de ambiente
+### 2. Configure environment variables
 
-Copie o arquivo de exemplo e configure suas credenciais:
+Copy the example file and configure your credentials:
 
 ```bash
 cp .env.example .env
 ```
 
-Edite o arquivo `.env` e adicione sua chave da API OpenAI:
+Edit the `.env` file and add your OpenAI API key:
 
 ```bash
 # OpenAI API Key
-OPENAI_API_KEY=sua_chave_api_openai_aqui
+OPENAI_API_KEY=your_openai_api_key_here
 
 # OpenAI Model
 OPENAI_MODEL=text-embedding-3-small
@@ -39,149 +39,149 @@ PGVECTOR_URL=postgresql+psycopg://postgres:postgres@localhost:5432/postgres
 PGVECTOR_COLLECTION=gpt5_collection
 ```
 
-### 3. Inicie o banco de dados PostgreSQL com PGVector
+### 3. Start the PostgreSQL database with PGVector
 
-Execute o comando para subir o banco de dados usando Docker Compose:
+Run the command to start the database using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
-Aguarde alguns segundos para que o banco seja inicializado completamente. Você pode verificar o status com:
+Wait a few seconds for the database to be fully initialized. You can check the status with:
 
 ```bash
 docker-compose ps
 ```
 
-### 4. Configure o ambiente virtual Python
+### 4. Configure the Python virtual environment
 
-Crie e ative um ambiente virtual:
+Create and activate a virtual environment:
 
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # No macOS/Linux
-# ou
-venv\Scripts\activate     # No Windows
+source venv/bin/activate  # On macOS/Linux
+# or
+venv\Scripts\activate     # On Windows
 ```
 
-Instale as dependências:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Execute a ingestão dos dados
+### 5. Run the data ingestion
 
-Execute o script de ingestão para processar o documento PDF e armazenar os embeddings no banco:
+Execute the ingestion script to process the PDF document and store the embeddings in the database:
 
 ```bash
 python src/ingest.py
 ```
 
-Este comando irá:
-- Carregar o arquivo `document.pdf`
-- Dividir o documento em chunks menores
-- Gerar embeddings usando OpenAI
-- Armazenar os dados no banco PostgreSQL com PGVector
+This command will:
+- Load the `document.pdf` file
+- Split the document into smaller chunks
+- Generate embeddings using OpenAI
+- Store the data in PostgreSQL with PGVector
 
-### 6. Execute o chat interativo
+### 6. Run the interactive chat
 
-Inicie o sistema de chat para fazer perguntas sobre o documento:
+Start the chat system to ask questions about the document:
 
 ```bash
 python src/chat.py
 ```
 
-## 💬 Como usar o chat
+## 💬 How to use the chat
 
-Após executar o comando acima, você verá a interface do chat:
-
-```
-=== Chat de Perguntas e Respostas ===
-Digite 'sair' ou 'quit' para encerrar o chat.
-
-Faça sua pergunta:
-```
-
-**Exemplo de uso:**
+After running the command above, you will see the chat interface:
 
 ```
-Faça sua pergunta:
-Qual o faturamento da Empresa SuperTechIABrazil?
+=== Question and Answer Chat ===
+Type 'exit' or 'quit' to end the chat.
 
-PERGUNTA: Qual o faturamento da Empresa SuperTechIABrazil?
-Buscando resposta...
-RESPOSTA: O faturamento foi de 10 milhões de reais.
+Ask your question:
+```
+
+**Usage example:**
+
+```
+Ask your question:
+What is the revenue of SuperTechIABrazil Company?
+
+QUESTION: What is the revenue of SuperTechIABrazil Company?
+Searching for answer...
+ANSWER: The revenue was 10 million reais.
 --------------------------------------------------
 
-Faça sua pergunta:
+Ask your question:
 ```
 
-### Comandos disponíveis no chat:
-- Digite sua pergunta e pressione Enter
-- Para sair: `sair`, `quit`, `exit` ou `q`
-- Ctrl+C também encerra o chat
+### Available chat commands:
+- Type your question and press Enter
+- To exit: `exit`, `quit`, `sair` or `q`
+- Ctrl+C also ends the chat
 
-## 🗂️ Estrutura do projeto
+## 🗂️ Project structure
 
 ```
-├── docker-compose.yml        # Configuração do PostgreSQL + PGVector
-├── document.pdf              # Documento a ser analisado
-├── requirements.txt          # Dependências Python
-├── .env.example              # Exemplo de variáveis de ambiente
-├── README.md                 # Este arquivo
+├── docker-compose.yml        # PostgreSQL + PGVector configuration
+├── document.pdf              # Document to be analyzed
+├── requirements.txt          # Python dependencies
+├── .env.example              # Environment variables example
+├── README.md                 # This file
 └── src/
-    ├── ingest.py             # Script de ingestão de dados
-    ├── search.py             # Funções de busca e geração de respostas
-    └── chat.py               # Interface CLI do chat
+    ├── ingest.py             # Data ingestion script
+    ├── search.py             # Search and answer generation functions
+    └── chat.py               # CLI chat interface
 ```
 
-## 🔧 Comandos úteis
+## 🔧 Useful commands
 
-### Parar o banco de dados:
+### Stop the database:
 ```bash
 docker-compose down
 ```
 
-### Ver logs do banco:
+### View database logs:
 ```bash
 docker-compose logs postgres
 ```
 
-### Resetar o banco (apagar todos os dados):
+### Reset the database (delete all data):
 ```bash
 docker-compose down -v
 docker-compose up -d
 ```
 
-### Testar apenas a função de busca:
+### Test only the search function:
 ```bash
 python src/search.py
 ```
 
-## 🛠️ Tecnologias utilizadas
+## 🛠️ Technologies used
 
-- **LangChain**: Framework para aplicações com LLM
-- **OpenAI GPT**: Modelo de linguagem para geração de respostas
-- **OpenAI Embeddings**: Para vetorização de texto
-- **PostgreSQL + PGVector**: Banco vetorial para busca semântica
-- **PyPDF**: Para processamento de documentos PDF
-- **Docker**: Containerização do banco de dados
+- **LangChain**: Framework for LLM applications
+- **OpenAI GPT**: Language model for answer generation
+- **OpenAI Embeddings**: For text vectorization
+- **PostgreSQL + PGVector**: Vector database for semantic search
+- **PyPDF**: For PDF document processing
+- **Docker**: Database containerization
 
-## ❗ Solução de problemas
+## ❗ Troubleshooting
 
-### Erro de conexão com o banco:
-- Verifique se o Docker está rodando: `docker ps`
-- Reinicie os containers: `docker-compose restart`
+### Database connection error:
+- Check if Docker is running: `docker ps`
+- Restart the containers: `docker-compose restart`
 
-### Erro de API OpenAI:
-- Verifique se a chave está correta no arquivo `.env`
-- Confirme se há créditos disponíveis na conta OpenAI
+### OpenAI API error:
+- Check if the key is correct in the `.env` file
+- Confirm if there are available credits in the OpenAI account
 
-### Erro de dependências:
-- Certifique-se de que o ambiente virtual está ativado
-- Reinstale as dependências: `pip install -r requirements.txt`
+### Dependencies error:
+- Make sure the virtual environment is activated
+- Reinstall dependencies: `pip install -r requirements.txt`
 
-### Documento não encontrado:
-- Verifique se o arquivo `document.pdf` está na raiz do projeto
-- Execute novamente o script de ingestão: `python src/ingest.py`
+### Document not found:
+- Check if the `document.pdf` file is in the project root
+- Run the ingestion script again: `python src/ingest.py`
